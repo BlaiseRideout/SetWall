@@ -1,0 +1,4 @@
+SetWall
+=======
+
+Random wallpaper selection
