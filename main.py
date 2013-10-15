@@ -9,7 +9,7 @@ def main():
 
 	setters = []
 
-	if hasattr(Settings, "SUBREDDIT"):
+	if hasattr(Settings, "SUBREDDIT") or hasattr(Settings, "SUBREDDITS"):
 		from reddit import setReddit
 		setters.append(setReddit)
 
@@ -20,8 +20,10 @@ def main():
 	if len(setters) > 0:
 		random.shuffle(setters)
 
+		tried = 0
+
 		set = False
-		while not set:
+		while not set and tried < Settings.MAXTRIES:
 			excepted = False
 			for setter in setters:
 				try:
@@ -30,9 +32,12 @@ def main():
 						break
 				except Exception as e:
 					excepted = True
-					print("Failed to retrieve wallpaper: " + str(e) + "\nTrying again in 5 seconds...")
-					time.sleep(5)
-					continue
+					print("Failed to retrieve wallpaper: " + str(e))
+					tried += 1
+					if tried < Settings.MAXTRIES:
+						print("Trying again in 5 seconds...")
+						time.sleep(5)
+						break
 			if not set and not excepted:
 				print("Failed to retrieve wallpaper. Please check your configuration.")
 				break

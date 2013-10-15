@@ -3,9 +3,10 @@
 import os
 
 class Settings:
-	SUBREDDIT = "wallpaper"
-	BOARDS = ["wg", "w"]
+	#SUBREDDITS = ["wallpapers", "wallpaper"]
+	BOARDS = ["wg"]
 	DIRECTORY = "/media/home/images/wallpapers/randwalls"
+	MAXTRIES = 12
 	WALLMANAGER = "feh"
 
 	WIDTH = 1366
@@ -23,3 +24,9 @@ class Settings:
 
 		if hasattr(self, "SUBREDDIT") and not hasattr(self, "PAGE"):
 			self.PAGE = "hot"
+
+		if not hasattr(self, "MAXPAGES"):
+			self.MAXPAGES = 20
+
+		if not hasattr(self, "MAXTRIES"):
+			self.MAXTRIES = 20
