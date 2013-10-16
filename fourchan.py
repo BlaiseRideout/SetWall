@@ -43,11 +43,15 @@ def set4chan():
 			random.shuffle(threads)
 
 			for thread in threads:
-				posts = copy.copy(thread['posts'])
+				op = thread['posts'][0]
+				if 'sticky' in op:
+					break
+				req = urllib.request.Request("http://api.4chan.org/" + board['board'] + "/res/" + str(op['no']) + ".json", headers=hdr)
+				posts = json.loads(urllib.request.urlopen(req).read().decode('utf8'))['posts']
 				random.shuffle(posts)
 
 				for post in posts:
-					if 'sticky' in post or not ('w' in post and 'h' in post and 'ext' in post and 'tim' in post):
+					if not ('w' in post and 'h' in post and 'ext' in post and 'tim' in post):
 						break
 					width = post['w']
 					height = post['h']
@@ -60,7 +64,7 @@ def set4chan():
 						set = fromstr(Settings.WALLMANAGER)(path, width, height)
 
 						if set:
-							print("Set: " + fname + " from /" + board['board'] + "/" + str(thread['posts'][0]['no'])  + ": " + str(width) + "x" + str(height))
+							print("Set: " + fname + " from /" + board['board'] + "/" + str(op['no'])  + ": " + str(width) + "x" + str(height))
 							break
 
 				if set:
