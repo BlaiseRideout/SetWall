@@ -2,7 +2,7 @@
 
 import urllib.request, json, re, os, random, copy
 
-from config import Settings
+from settings import Settings
 from setters import fromstr
 
 exts = ['.png', '.jpg', '.jpeg']
@@ -33,10 +33,10 @@ def setReddit():
 			if after != None:
 				url += "?after=" + after
 			req = urllib.request.Request(url, headers=hdr)
-			page = json.loads(urllib.request.urlopen(req).read().decode('utf8'))
+			pagedata = json.loads(urllib.request.urlopen(req).read().decode('utf8'))
 
-			if page['kind'] == "Listing":
-				posts = copy.copy(page['data']['children'])
+			if pagedata['kind'] == "Listing":
+				posts = copy.copy(pagedata['data']['children'])
 				random.shuffle(posts)
 				for post in posts:
 					dims = re.search(r'(?P<width>[0-9]+) ?x ?(?P<height>[0-9]+)', post['data']['title'])
@@ -48,17 +48,22 @@ def setReddit():
 					if ext.lower() in exts:
 						fname = post['data']['id'] + ext
 						path = Settings.DIRECTORY + "/" + fname 
-						f = open(path, "wb+")
-						f.write(urllib.request.urlopen(post['data']['url']).read())
+						if not os.path.exists(path):
+							f = open(path, "wb+")
+							f.write(urllib.request.urlopen(post['data']['url']).read())
 						set = fromstr(Settings.WALLMANAGER)(path, width, height)
 
 						if set:
-							print("Set: " + fname + ": " + str(width) + "x" + str(height))
+							print("Set: " + fname + ": " + str(width) + "x" + str(height) + " from /r/" + subreddit)
+							break
 
-						
 				if not set:
 					if len(posts) <= 0 or page > Settings.MAXPAGES:
 						break
 					page += 1
-					after = page['data']['children'][-1]['data']['name']
+					after = pagedata['data']['children'][-1]['data']['name']
+			else:
+				break
+		if set:
+			break
 	return set

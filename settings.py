@@ -5,7 +5,9 @@ import os
 class Settings:
 	@classmethod
 	def load(self):
-		if not os.path.exists('config.py'):
+		try:
+			import config
+		except:
 			try:
 				with open('config_default.py'):
 					import shutil
@@ -14,9 +16,8 @@ class Settings:
 					import config
 			except:
 				print("Couldn't open default config file, falling back to defaults")
+				config = None
 
-		if os.path.exists('config.py'):
-			import config
 
 		if not hasattr(config, "DIRECTORY"):
 			self.DIRECTORY = "/tmp"
@@ -37,7 +38,7 @@ class Settings:
 
 		if (hasattr(config, "SUBREDDIT") or hasattr(config, "SUBREDDITS")) and not hasattr(config, "PAGE"):
 			self.PAGE = "hot"
-		else:
+		elif hasattr(config, "PAGE"):
 			self.PAGE = config.PAGE
 
 		if not hasattr(config, "MAXPAGES"):
@@ -54,4 +55,17 @@ class Settings:
 			self.WALLMANAGER = "gsettings"
 		else:
 			self.WALLMANAGER = config.WALLMANAGER
+
+		if not (hasattr(config, "SUBREDDIT") or hasattr(config, "SUBREDDITS") or hasattr(config, "BOARD") or hasattr(config, "BOARDS")):
+			self.BOARDS=["/wg/", "/w/"]
+			self.SUBREDDITS=["wallpapers", "wallpaper"]
+		else:
+			if hasattr(config, "SUBREDDIT"):
+				self.SUBREDDIT = config.SUBREDDIT
+			if hasattr(config, "SUBREDDITS"):
+				self.SUBREDDITS = config.SUBREDDITS
+			if hasattr(config, "BOARDS"):
+				self.BOARDS = config.BOARDS
+			if hasattr(config, "BOARD"):
+				self.BOARD = config.BOARD
 

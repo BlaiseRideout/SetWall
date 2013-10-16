@@ -2,10 +2,10 @@
 
 import urllib.request, json, os, random, copy
 
-from config import Settings
+from settings import Settings
 from setters import fromstr
 
-exts = ['.png', '.jpg']
+exts = ['.png', '.jpg', '.jpeg']
 
 def set4chan():
 	hdr = { 'User-Agent' : "Mozilla/5.0 (X11; Linux x86_64; rv:24.0) Gecko/20100101 Firefox/24.0" }
@@ -56,11 +56,12 @@ def set4chan():
 					width = post['w']
 					height = post['h']
 					ext = post['ext']
-					if ext in exts:
+					if ext.lower() in exts:
 						fname = str(post['tim']) + ext
 						path = Settings.DIRECTORY + "/" + fname
-						f = open(path, "wb+")
-						f.write(urllib.request.urlopen("http://images.4chan.org/" + board['board'] + "/src/" + fname).read())
+						if not os.path.exists(path):
+							f = open(path, "wb+")
+							f.write(urllib.request.urlopen("http://images.4chan.org/" + board['board'] + "/src/" + fname).read())
 						set = fromstr(Settings.WALLMANAGER)(path, width, height)
 
 						if set:

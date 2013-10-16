@@ -2,7 +2,7 @@
 
 from subprocess import call
 
-from config import Settings
+from settings import Settings
 
 def Feh(path, width, height):
 	if width > Settings.WIDTH and height > Settings.HEIGHT:
