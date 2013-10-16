@@ -5,7 +5,7 @@ import os
 class Settings:
 	#SUBREDDITS = ["wallpapers", "wallpaper"]
 	BOARDS = ["wg"]
-	DIRECTORY = "/media/home/images/wallpapers/randwalls"
+	DIRECTORY = "/tmp"
 	MAXTRIES = 12
 	WALLMANAGER = "feh"
 
