@@ -41,4 +41,4 @@ def fromstr(s):
 	elif s == "disable":
 		return dummy
 	else:
-		return Feh
+		return gsettings

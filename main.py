@@ -2,7 +2,7 @@
 
 import random, time
 
-from config import Settings
+from settings import Settings
 
 def main():
 	Settings.load()
