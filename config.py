@@ -5,7 +5,7 @@ import os
 class Settings:
 	SUBREDDIT = "wallpaper"
 	BOARDS = ["wg", "w"]
-	DIRECTORY = "/media/home/images/wallpapers/randwalls"
+	DIRECTORY = "/tmp"
 	WALLMANAGER = "gsettings"
 
 	WIDTH = 1366
