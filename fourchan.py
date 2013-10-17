@@ -5,6 +5,8 @@ import urllib.request, json, os, random, copy
 from settings import Settings
 from setters import fromstr
 
+import util
+
 exts = ['.png', '.jpg', '.jpeg']
 
 def set4chan():
@@ -53,15 +55,12 @@ def set4chan():
 				for post in posts:
 					if not ('w' in post and 'h' in post and 'ext' in post and 'tim' in post):
 						break
-					width = post['w']
-					height = post['h']
+					width = int(post['w'])
+					height = int(post['h'])
 					ext = post['ext']
-					if ext.lower() in exts:
+					if ext.lower() in exts and width >= Settings.WIDTH and height >= Settings.HEIGHT:
 						fname = str(post['tim']) + ext
-						path = Settings.DIRECTORY + "/" + fname
-						if not os.path.exists(path):
-							f = open(path, "wb+")
-							f.write(urllib.request.urlopen("http://images.4chan.org/" + board['board'] + "/src/" + fname).read())
+						path = util.wget("http://images.4chan.org/" + board['board'] + "/src/" + fname, Settings.DIRECTORY)
 						set = fromstr(Settings.WALLMANAGER)(path, width, height)
 
 						if set:

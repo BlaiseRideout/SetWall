@@ -5,7 +5,7 @@ from subprocess import call
 from settings import Settings
 
 def Feh(path, width, height):
-	if width > Settings.WIDTH and height > Settings.HEIGHT:
+	if width >= Settings.WIDTH and height >= Settings.HEIGHT:
 		iasp = int(height * 1.0 / width * 16)
 		asp = int(Settings.HEIGHT * 1.0 / Settings.WIDTH * 16)
 		if iasp >= asp - 1 and iasp <= asp + 1:

@@ -5,6 +5,8 @@ import urllib.request, json, re, os, random, copy
 from settings import Settings
 from setters import fromstr
 
+import util
+
 exts = ['.png', '.jpg', '.jpeg']
 
 def setReddit():
@@ -45,12 +47,9 @@ def setReddit():
 					width = int(dims.group('width'))
 					height = int(dims.group('height'))
 					ext = os.path.splitext(post['data']['url'])[1]
-					if ext.lower() in exts:
+					if ext.lower() in exts and width >= Settings.WIDTH and height >= Settings.HEIGHT:
 						fname = post['data']['id'] + ext
-						path = Settings.DIRECTORY + "/" + fname 
-						if not os.path.exists(path):
-							f = open(path, "wb+")
-							f.write(urllib.request.urlopen(post['data']['url']).read())
+						path = util.wget(post['data']['url'], Settings.DIRECTORY)
 						set = fromstr(Settings.WALLMANAGER)(path, width, height)
 
 						if set:
